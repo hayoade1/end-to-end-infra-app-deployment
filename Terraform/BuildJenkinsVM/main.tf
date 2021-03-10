@@ -35,11 +35,11 @@ locals {
 }
 
 data "azurerm_resource_group" "myresourcegroup" {
-  name = "${var.prefix}-jenkins"
+  name = "DEVOPS"
 }
 
 data "azurerm_image" "docker-image" {
-  name                = "samg-Docker"
+  name                = "jenkins-tf-ansible-vault"
   resource_group_name = data.azurerm_resource_group.myresourcegroup.name
 }
 
