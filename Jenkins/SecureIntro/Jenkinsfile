@@ -69,7 +69,7 @@ node() {
           EOF
           '''.stripIndent()
         } 
-        stage("Terraform to Provision the 2 App VMs + Consul Server VM in Azure") {
+        stage("Terraform to Provision the 3 App VMs + Consul Server VM in Azure") {
           // Search for the output FQDN from Terraform using jq and feed it into the inventory file of Ansible
           sh '''
               cd /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
