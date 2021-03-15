@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
-def ROLE_ID = "11f503c6-9c4f-d223-7845-64b177864ddf" //this is the Role-id for the Pipeline and needs to be inserted manually by a Vault Admin
-def VAULT_ADDR = "http://vault.hashidemos.tekanaid.com:8200"
+def ROLE_ID = "d3a7f406-b694-bc53-6a8e-e2c37e305816" //this is the Role-id for the Pipeline and needs to be inserted manually by a Vault Admin
+def VAULT_ADDR = "http://13.92.96.202:8200"
 env.VAULT_ADDR = VAULT_ADDR
 
 node() {
