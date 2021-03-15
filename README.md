@@ -338,3 +338,4 @@ resource "vault_database_secret_backend_role" "mongodb-azure-role" {
   creation_statements = ["{ \"db\": \"admin\", \"roles\": [{ \"role\": \"readWriteAnyDatabase\" }, {\"role\": \"read\", \"db\": \"foo\"}] }"]
 }
 ```
+I edited this file
