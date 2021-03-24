@@ -64,7 +64,7 @@ node() {
           sh '''
           cat <<EOF > /var/jenkins_home/.terraformrc
           credentials "app.terraform.io" {
-              token = "$(vault kv get -field=tfc_token internal/tfc)"
+              token = "$(vault kv get -field=Terraform-jenkins kv/terraform)"
           }
           EOF
           '''.stripIndent()
