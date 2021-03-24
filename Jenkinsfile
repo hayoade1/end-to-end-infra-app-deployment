@@ -63,7 +63,7 @@ node() {
         stage("Retrieve TFC Token from Vault and Create the .terraformrc file to Authn into TFC") {
           sh '''
           cat <<EOF > /var/jenkins_home/.terraformrc
-          credentials "app.terraform.io" {
+          credentials "magician.eastus.cloudapp.azure.com" {
               token = "$(vault kv get -field=Terraform-jenkins kv/terraform)"
           }
           EOF
