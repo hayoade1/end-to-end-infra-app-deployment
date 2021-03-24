@@ -14,7 +14,7 @@ node() {
         ]
     ]){
         // The Jenkins Node is only allowed to create the wrapped secret ID and with a wrap-ttl between 100s and 300s
-        stage ('Jenkins Node Creates a Wrapped Secret ID for the Pipeline') {
+        stage ('Jenkins Node Creates a Wrapped Secret ID for the Pipelines') {
           
             def WRAPPED_SID = ""
             env.WRAPPED_SID = sh(
