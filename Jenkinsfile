@@ -9,7 +9,7 @@ node() {
   withCredentials([
         [
             $class: 'VaultTokenCredentialBinding',
-            credentialsId: 'Jenkins_Node_Vault_AppRole_1',
+            credentialsId: 'vault_token',
             vaultAddr: 'http://13.92.96.202:8200'
         ]
     ]){
