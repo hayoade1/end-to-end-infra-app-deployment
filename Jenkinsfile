@@ -12,16 +12,7 @@ node() {
             credentialsId: 'Jenkins_Node_Vault_AppRole_1',
             vaultAddr: 'http://13.92.96.202:8200'
         ]
-    ]){
-        // The Jenkins Node is only allowed to create the wrapped secret ID and with a wrap-ttl between 100s and 300s
-        stage ('Jenkins Node Creates a Wrapped Secret ID for the Pipelines') {
-          
-            def WRAPPED_SID = ""
-            env.WRAPPED_SID = sh(
-              returnStdout: true,
-              script: "vault write -field=wrapping_token -wrap-ttl=200s -f auth/pipeline/role/pipeline-approle/secret-id"
-            )
-        }
+    ])
         // the stage below doesn't work with the Vault Jenkins policy to write wrapped secrets only, an admin needs to manually provide the ROLE_ID as defined at the top of this file
         // stage ("Get Role ID for the pipeline AppRole") {
         //   def ROLE_ID = ""
