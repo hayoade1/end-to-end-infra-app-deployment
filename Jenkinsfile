@@ -55,7 +55,7 @@ node() {
         stage("Create Azure Creds for Terraform to Provision App VMs") {
           sh(returnStdout:false, script: "vault read -format=json azure/creds/jenkins > /tmp/azure_creds.json")
           sh '''
-          mkdir /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
+          sudo mkdir /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
           cat /tmp/azure_creds.json | jq .data.client_id && cat /tmp/azure_creds.json | jq .data.client_secret
           echo client_id=$(cat /tmp/azure_creds.json | jq .data.client_id) > /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs/client_id.auto.tfvars
           echo client_secret=$(cat /tmp/azure_creds.json | jq .data.client_secret) > /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs/client_secret.auto.tfvars
