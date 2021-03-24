@@ -21,7 +21,14 @@ node() {
         //     script: "vault read -field=role_id auth/pipeline/role/pipeline-approle/role-id"
         //   )
         // }
- 
+  stage ('Jenkins Node Creates a Wrapped Secret ID for the Pipelines') {
+          
+            def WRAPPED_SID = ""
+            env.WRAPPED_SID = sh(
+              returnStdout: true,
+              script: "vault write -field=wrapping_token -wrap-ttl=200s -f auth/pipeline/role/pipeline-approle/secret-id"
+            )
+        }
     
        
        
