@@ -90,7 +90,7 @@ node() {
               vault write -field=wrapping_token -wrap-ttl=900s -f auth/approle/role/webblog-approle/secret-id > /tmp/app_wrap_secret_id
           '''
         }
-        stage("Ansible to Configure Webblog App VMs") {
+        stage("Ansible to Configure Webblog App VM Machines") {
           // We will need to install Vault to use the Vault agent and Consul for service mesh
           // Grab MongoDB Root Credentials from Vault and pass it to Ansible to create the MongoDB Container
           // set +x below is to hide the response from vault with the mongo creds from displaying in Jenkins' logs
