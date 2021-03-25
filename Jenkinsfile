@@ -84,9 +84,13 @@ node() {
 
         stage("Terraform to Provision the 3 App VMs + Consul Server VM in Azure") {
           // Search for the output FQDN from Terraform using jq and feed it into the inventory file of Ansible
+           def TFE_TOKEN = ""
+           env.TFE_TOKEN = sh(
+            returnStdout: true,
+            script: "vault kv get -field=terraform kv/terraform"
+          )
           sh '''
               cd /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
-              terraform login $(vault kv get -field=terraform kv/terraform)
               #terraform destroy --auto-approve
               terraform init
               terraform fmt
