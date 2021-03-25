@@ -70,7 +70,7 @@ node() {
               token = "$(curl -H 'X-Vault-Token: ${VAULT_TOKEN}' -X GET ${VAULT_ADDR}/v1/kv/data/terraform | jq .data.data.terraform)"
           }
           EOF
-          echo "$(curl -H 'X-Vault-Token: ${VAULT_TOKEN}' -X GET ${VAULT_ADDR}/v1/kv/data/terraform | jq .data.data.terraform)"
+          echo "$(curl -H 'X-Vault-Token: ${VAULT_TOKEN}' -X GET ${VAULT_ADDR}/v1/kv/data/terraform)"
           '''.stripIndent()
         } 
     
