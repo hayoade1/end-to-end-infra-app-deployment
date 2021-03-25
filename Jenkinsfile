@@ -60,23 +60,20 @@ node() {
           echo client_secret=$(cat /tmp/azure_creds.json | jq .data.client_secret) > /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs/client_secret.auto.tfvars
           '''
         }
+    
        
         stage("Retrieve TFC Token from Vault and Create the .terraformrc file to Authn into TFC") {
           
-          def token = ""
-          env.token = sh(
-            returnStdout: true,
-            script: "curl -H 'X-Vault-Token: $VAULT_TOKEN' -X GET http://13.92.96.202:8200/v1/kv/data/terraform"        
-          )
           sh '''
-          echo token = $(curl -H 'X-Vault-Token: $VAULT_TOKEN' -X GET http://13.92.96.202:8200/v1/kv/data/terraform | jq .data.data.terraform)
           cat <<EOF > /var/jenkins_home/.terraformrc
           credentials "magician.eastus.cloudapp.azure.com" {
-              token = "${token}
+              token = "$(vault kv get -field=terraform kv/terraform)"
           }
           EOF
           '''.stripIndent()
         } 
+    
+
         stage("Terraform to Provision the 3 App VMs + Consul Server VM in Azure") {
           // Search for the output FQDN from Terraform using jq and feed it into the inventory file of Ansible
           sh '''
