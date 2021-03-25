@@ -78,7 +78,7 @@ node() {
           // Search for the output FQDN from Terraform using jq and feed it into the inventory file of Ansible
          
           sh '''
-              
+              cp /var/jenkins_home/.terraformrc /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
               cd /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
              #terraform destroy --auto-approve
               terraform init
