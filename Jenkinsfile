@@ -63,18 +63,14 @@ node() {
     
        
         stage("Retrieve TFC Token from Vault and Create the .terraformrc file to Authn into TFC") {
-          def VAULT_TOKEN = ""
-          env.VAULT_TOKEN = sh(
-            returnStdout: true,
-            script: "${VAULT_LOGIN_TOKEN}"
-          )
+         
           sh '''
           cat <<EOF > /var/jenkins_home/.terraformrc
           credentials "magician.eastus.cloudapp.azure.com" {
               token = "$(curl -H 'X-Vault-Token: "${VAULT_TOKEN}"' -X GET ${VAULT_ADDR}/v1/kv/data/terraform | jq .data.data.terraform)"
           }
           EOF
-          echo "$(curl -H 'X-Vault-Token: $VAULT_TOKEN' -X GET ${VAULT_ADDR}/v1/kv/data/terraform)"
+          echo "$(curl -H 'X-Vault-Token: "${VAULT_TOKEN}"' -X GET ${VAULT_ADDR}/v1/kv/data/terraform | jq .data.data.terraform)"
           '''.stripIndent()
         } 
     
