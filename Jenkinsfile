@@ -80,6 +80,7 @@ node() {
           sh '''
               cd /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
               git clone https://github.com/hayoade1/end-to-end-infra-app-deployment.git
+              cd end-to-end-infra-app-deployment
               #terraform destroy --auto-approve
               terraform init
               terraform fmt
