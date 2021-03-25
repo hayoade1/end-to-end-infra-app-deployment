@@ -53,7 +53,6 @@ node() {
           )
         }
         stage("Create Azure Creds for Terraform to Provision App VMs") {
-          sh(returnStdout:false, script: "vault kv get -field=terraform kv/terraform")
           sh(returnStdout:false, script: "vault read -format=json azure/creds/jenkins > /tmp/azure_creds.json")
           sh '''
           cat /tmp/azure_creds.json | jq .data.client_id && cat /tmp/azure_creds.json | jq .data.client_secret
@@ -65,31 +64,19 @@ node() {
        
         stage("Retrieve TFC Token from Vault and Create the .terraformrc file to Authn into TFC") {
           
-          sh '''
-            cd /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
-            cat << EOF > backend.tf
-            terraform {
-            backend "remote" {
-            hostname = "magician.eastus.cloudapp.azure.com"
-            organization = "Zero-Trust"
-
-            workspaces {
-            name = "Vault_auto"
-              }
-             }
-            }
-            EOF 
+         sh '''
+          cat <<EOF > /var/jenkins_home/.terraformrc
+          credentials "app.terraform.io" {
+              token = "$(vault kv get -field=terraform kv/terraform)"
+          }
+          EOF
           '''.stripIndent()
         } 
     
 
         stage("Terraform to Provision the 3 App VMs + Consul Server VM in Azure") {
           // Search for the output FQDN from Terraform using jq and feed it into the inventory file of Ansible
-           def TFE_TOKEN = ""
-           env.TFE_TOKEN = sh(
-            returnStdout: true,
-            script: "vault kv get -field=terraform kv/terraform"
-          )
+         
           sh '''
               cd /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
               #terraform destroy --auto-approve
