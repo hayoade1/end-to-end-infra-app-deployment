@@ -65,10 +65,15 @@ node() {
         sh(returnStdout:false, script: "vault login s.gHoQl30fZnZr0YsqwTUOpdcU")  
         }
         stage("Retrieve TFC Token from Vault and Create the .terraformrc file to Authn into TFC") {
+          def token = ""
+          env.token = sh(
+            returnStdout: true,
+            script: "vault kv get -field=Jenkins-terraform kv/terraform"
+          )
           sh '''
           cat <<EOF > /var/jenkins_home/.terraformrc
           credentials "magician.eastus.cloudapp.azure.com" {
-              token = "$(vault kv get -field=Jenkins-terraform kv/terraform)"
+              token = "${token}
           }
           EOF
           '''.stripIndent()
