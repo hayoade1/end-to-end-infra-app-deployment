@@ -78,10 +78,9 @@ node() {
           // Search for the output FQDN from Terraform using jq and feed it into the inventory file of Ansible
          
           sh '''
+              cp /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs/end-to-end-infra-app-deployment/* /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
               cd /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
-              git clone https://github.com/hayoade1/end-to-end-infra-app-deployment.git
-              cd cd /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs/end-to-end-infra-app-deployment
-              #terraform destroy --auto-approve
+             #terraform destroy --auto-approve
               terraform init
               terraform fmt
               terraform validate
