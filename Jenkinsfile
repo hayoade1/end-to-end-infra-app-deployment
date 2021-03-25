@@ -60,10 +60,7 @@ node() {
           echo client_secret=$(cat /tmp/azure_creds.json | jq .data.client_secret) > /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs/client_secret.auto.tfvars
           '''
         }
-        stage("Log into Vault with Pipeline AppRole") {
-      
-        sh(returnStdout:false, script: "vault login s.gHoQl30fZnZr0YsqwTUOpdcU")  
-        }
+       
         stage("Retrieve TFC Token from Vault and Create the .terraformrc file to Authn into TFC") {
           def token = ""
           env.token = sh(
