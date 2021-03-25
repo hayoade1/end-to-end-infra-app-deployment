@@ -63,14 +63,21 @@ node() {
     
        
         stage("Retrieve TFC Token from Vault and Create the .terraformrc file to Authn into TFC") {
-         
+          
           sh '''
-          cat <<EOF > /var/jenkins_home/.terraformrc
-          credentials "magician.eastus.cloudapp.azure.com" {
-              token = "$(curl -H 'X-Vault-Token: ${VAULT_LOGIN_TOKEN}' -X GET ${VAULT_ADDR}/v1/kv/data/terraform | jq .data.data.terraform)"
-          }
-          EOF
-          echo "$(curl -H 'X-Vault-Token: ${VAULT_LOGIN_TOKEN}' -X GET ${VAULT_ADDR}/v1/kv/data/terraform | jq .data.data.terraform)"
+            cd /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
+            cat << EOF > backend.tf
+            terraform {
+            backend "remote" {
+            hostname = "magician.eastus.cloudapp.azure.com"
+            organization = "Zero-Trust"
+
+            workspaces {
+            name = "Vault_auto"
+              }
+             }
+            }
+            EOF 
           '''.stripIndent()
         } 
     
@@ -79,11 +86,12 @@ node() {
           // Search for the output FQDN from Terraform using jq and feed it into the inventory file of Ansible
           sh '''
               cd /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
-              terraform destroy --auto-approve
-              #terraform init
-              #terraform fmt
-              #terraform validate
-              #terraform apply --auto-approve
+              terraform login $(vault kv get -field=terraform kv/terraform)
+              #terraform destroy --auto-approve
+              terraform init
+              terraform fmt
+              terraform validate
+              terraform apply --auto-approve
               sed -i "s/<placeholder_app>/$(terraform output -json webblog_public_dns | jq -r '.["samg-webblog-01-ip"]')/g" ../../Ansible/WebblogApp/inventory
               sed -i "s/<placeholder_db>/$(terraform output -json webblog_public_dns | jq -r '.["samg-webblog-02-ip"]')/g" ../../Ansible/WebblogApp/inventory
               sed -i "s/<placeholder_consul_server>/$(terraform output -json webblog_public_dns | jq -r '.["samg-webblog-03-ip"]')/g" ../../Ansible/WebblogApp/inventory
