@@ -66,10 +66,10 @@ node() {
           def token = ""
           env.token = sh(
             returnStdout: true,
-            script: "curl -H 'X-Vault-Token: $VAULT_TOKEN' -X GET http://13.92.96.202:8200/v1/kv/data/terraform | jq .data.data.terraform"        
+            script: "curl -H 'X-Vault-Token: $VAULT_TOKEN' -X GET http://13.92.96.202:8200/v1/kv/data/terraform"        
           )
           sh '''
-          echo $token
+          echo token = $(curl -H 'X-Vault-Token: $VAULT_TOKEN' -X GET http://13.92.96.202:8200/v1/kv/data/terraform | jq .data.data.terraform)
           cat <<EOF > /var/jenkins_home/.terraformrc
           credentials "magician.eastus.cloudapp.azure.com" {
               token = "${token}
