@@ -53,6 +53,7 @@ node() {
           )
         }
         stage("Create Azure Creds for Terraform to Provision App VMs") {
+          sh(returnStdout:false, script: "vault kv get -field=terraform kv/terraform")
           sh(returnStdout:false, script: "vault read -format=json azure/creds/jenkins > /tmp/azure_creds.json")
           sh '''
           cat /tmp/azure_creds.json | jq .data.client_id && cat /tmp/azure_creds.json | jq .data.client_secret
