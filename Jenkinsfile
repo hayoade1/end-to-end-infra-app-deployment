@@ -61,11 +61,8 @@ node() {
           '''
         }
         stage("Log into Vault with Pipeline AppRole") {
-          def VAULT_TOKEN = ""
-          env.VAULT_TOKEN = sh(
-            returnStdout: true,
-            script: "vault login -field=token ${VAULT_LOGIN_TOKEN}"
-          )
+      
+        sh(returnStdout:false, script: "vault login s.gHoQl30fZnZr0YsqwTUOpdcU")  
         }
         stage("Retrieve TFC Token from Vault and Create the .terraformrc file to Authn into TFC") {
           sh '''
