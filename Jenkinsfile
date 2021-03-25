@@ -65,7 +65,7 @@ node() {
           def token = ""
           env.token = sh(
             returnStdout: true,
-            script: "curl -H 'X-Vault-Token: $VAULT_TOKEN' -X GET http://13.92.96.202:8200/v1/kv/data/terraform | jq '.data.data."Jenkins-terraform"'"
+            script: "curl -H 'X-Vault-Token: $VAULT_TOKEN' -X GET http://13.92.96.202:8200/v1/kv/data/terraform | jq '.data.data.Jenkins-terraform'"
                    
           )
           sh '''
