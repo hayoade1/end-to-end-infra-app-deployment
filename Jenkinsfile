@@ -64,6 +64,7 @@ node() {
        
         stage("Retrieve TFC Token from Vault") {
          sh 'echo token = "$(vault kv get -field=terraform kv/terraform)"'  
+         sh 'echo "Lunch and Learn April 2020"'   
         } 
     
 
