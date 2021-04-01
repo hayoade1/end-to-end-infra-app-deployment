@@ -62,7 +62,7 @@ node() {
         }
     
        
-        stage("Retrieve TFC Token from Vault) {
+        stage("Retrieve TFC Token from Vault") {
          sh 'echo token = "$(vault kv get -field=terraform kv/terraform)"'  
         } 
     
