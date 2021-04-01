@@ -74,39 +74,39 @@ node() {
         } 
     
 
-        stage("Terraform to Provision the 3 App VMs + Consul Server VM in Azure") {
+      //  stage("Terraform to Provision the 3 App VMs + Consul Server VM in Azure") {
           // Search for the output FQDN from Terraform using jq and feed it into the inventory file of Ansible
          
-          sh '''
-              cp /var/jenkins_home/.terraformrc /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
-              cd /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
-             #terraform destroy --auto-approve
-              terraform init
-              terraform fmt
-              terraform validate
-              terraform apply --auto-approve
-              sed -i "s/<placeholder_app>/$(terraform output -json webblog_public_dns | jq -r '.["samg-webblog-01-ip"]')/g" ../../Ansible/WebblogApp/inventory
-              sed -i "s/<placeholder_db>/$(terraform output -json webblog_public_dns | jq -r '.["samg-webblog-02-ip"]')/g" ../../Ansible/WebblogApp/inventory
-              sed -i "s/<placeholder_consul_server>/$(terraform output -json webblog_public_dns | jq -r '.["samg-webblog-03-ip"]')/g" ../../Ansible/WebblogApp/inventory
-          '''
-        }  
-        stage("Create Role-id and Wrapped Secret-id for the Vault Agent on App VM") {
+      //    sh '''
+       //       cp /var/jenkins_home/.terraformrc /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
+        //      cd /var/jenkins_home/workspace/Webblog_App@script/Terraform/ProvisionAppVMs
+        //     #terraform destroy --auto-approve
+         //     terraform init
+          //    terraform fmt
+          //    terraform validate
+          //    terraform apply --auto-approve
+         //     sed -i "s/<placeholder_app>/$(terraform output -json webblog_public_dns | jq -r '.["samg-webblog-01-ip"]')/g" ../../Ansible/WebblogApp/inventory
+          //    sed -i "s/<placeholder_db>/$(terraform output -json webblog_public_dns | jq -r '.["samg-webblog-02-ip"]')/g" ../../Ansible/WebblogApp/inventory
+           //   sed -i "s/<placeholder_consul_server>/$(terraform output -json webblog_public_dns | jq -r '.["samg-webblog-03-ip"]')/g" ../../Ansible/WebblogApp/inventory
+      //    '''
+      //  }  
+       // stage("Create Role-id and Wrapped Secret-id for the Vault Agent on App VM") {
           // Ansible to send the Role-id and the Wrapped Secret-id give 15 minutes for the wrap ttl to give enough time for ansible to prep the machines.
-          sh '''
-              vault read -field=role_id auth/approle/role/webblog-approle/role-id > /tmp/app_role_id
-              vault write -field=wrapping_token -wrap-ttl=900s -f auth/approle/role/webblog-approle/secret-id > /tmp/app_wrap_secret_id
-          '''
-        }
-        stage("Ansible to Configure Webblog App VM Machines") {
+  //        sh '''
+      //        vault read -field=role_id auth/approle/role/webblog-approle/role-id > /tmp/app_role_id
+       //       vault write -field=wrapping_token -wrap-ttl=900s -f auth/approle/role/webblog-approle/secret-id > /tmp/app_wrap_secret_id
+     //     '''
+      //  }
+      //  stage("Ansible to Configure Webblog App VM Machines") {
           // We will need to install Vault to use the Vault agent and Consul for service mesh
           // Grab MongoDB Root Credentials from Vault and pass it to Ansible to create the MongoDB Container
           // set +x below is to hide the response from vault with the mongo creds from displaying in Jenkins' logs
-          sh '''
-              set +x
-              cd /var/jenkins_home/workspace/Webblog_App@script/Ansible/WebblogApp
-              ansible-playbook -i inventory --extra-vars "mongo_root_user=$(vault kv get -field=username internal/webblog/mongodb) mongo_root_password=$(vault kv get -field=password internal/webblog/mongodb)" appPlaybook.yaml
-          '''
-        } 
+    //      sh '''
+      //        set +x
+       //       cd /var/jenkins_home/workspace/Webblog_App@script/Ansible/WebblogApp
+         //     ansible-playbook -i inventory --extra-vars "mongo_root_user=$(vault kv get -field=username internal/webblog/mongodb) mongo_root_password=$(vault kv get -field=password internal/webblog/mongodb)" appPlaybook.yaml
+     //     '''
+ //       } 
   }          
 }
 //
