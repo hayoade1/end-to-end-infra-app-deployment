@@ -67,8 +67,8 @@ node() {
          sh '''
           cat <<EOF > /var/jenkins_home/.terraformrc
           credentials "magician.eastus.cloudapp.azure.com" {
-              token = "$(vault kv get -field=terraform kv/terraform)"
-              echo $token
+            echo token = "$(vault kv get -field=terraform kv/terraform)"
+        
           }
           EOF
           '''.stripIndent()
